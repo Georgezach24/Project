@@ -1,2 +1,0 @@
-# RTGP
-RTGP Project 
