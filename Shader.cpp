@@ -1,5 +1,5 @@
 #include "Shader.h"
-#include <glad.h>
+#include <include <glad/glad.h>
 #include <iostream>
 
 Shader::Shader(const char* vertexSrc, const char* fragmentSrc) {

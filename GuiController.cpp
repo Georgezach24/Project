@@ -1,5 +1,5 @@
 #include "GuiController.h"
-#include <imgui.h>
+#include "imgui.h"
 
 GuiController::GuiController(PatternRenderer& renderer) : renderer(renderer) {}
 

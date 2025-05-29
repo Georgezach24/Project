@@ -1,9 +1,8 @@
 #pragma once
+#include <GLFW/glfw3.h>
 #include <memory>
-#include "Shader.h"
 #include "PatternRenderer.h"
 #include "GuiController.h"
-#include <glfw3.h> 
 
 class Application {
 public:

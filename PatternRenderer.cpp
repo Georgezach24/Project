@@ -1,5 +1,5 @@
 #include "PatternRenderer.h"
-#include <glad.h>
+#include <include/glad/glad.h>
 
 static const char* vertexShaderSrc = R"(
 #version 330 core
