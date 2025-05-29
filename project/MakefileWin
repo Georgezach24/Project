@@ -1,0 +1,27 @@
+# Makefile for RTGP lab project - Win environment
+# Visual Studio compiler version
+
+FILENAME = project
+CC = cl.exe
+CCFLAGS  = /Od /Zi /EHsc /MT
+LFLAGS = /LIBPATH:../../libs/win glfw3.lib gdi32.lib user32.lib Shell32.lib Advapi32.lib
+
+SOURCES = ../../include/glad/glad.c \
+          main.cpp Application.cpp GuiController.cpp PatternRenderer.cpp Shader.cpp \
+          ../../include/imgui/imgui.cpp \
+          ../../include/imgui/imgui_draw.cpp \
+          ../../include/imgui/imgui_tables.cpp \
+          ../../include/imgui/imgui_widgets.cpp \
+          ../../include/imgui/backends/imgui_impl_glfw.cpp \
+          ../../include/imgui/backends/imgui_impl_opengl3.cpp
+
+TARGET = $(FILENAME).exe
+
+.PHONY : all
+all:
+	$(CC) $(CCFLAGS) /I../../include /I../../include/imgui /I../../include/imgui/backends $(SOURCES) /Fe:$(TARGET) /link $(LFLAGS)
+
+.PHONY : clean
+clean :
+
+
