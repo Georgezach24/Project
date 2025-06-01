@@ -1,0 +1,2 @@
+# Ignore large binary libs
+libs/win/*.lib
