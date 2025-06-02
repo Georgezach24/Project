@@ -6,7 +6,7 @@ static const char* vertexShaderSrc = R"(
 layout(location = 0) in vec2 aPos;
 out vec2 TexCoords;
 void main() {
-    TexCoords = aPos * 0.5 + 0.5; // convert from [-1, 1] to [0, 1]
+    TexCoords = aPos * 0.5 + 0.5;
     gl_Position = vec4(aPos, 0.0, 1.0);
 }
 )";
@@ -15,20 +15,22 @@ static const char* fragmentShaderSrc = R"(
 #version 330 core
 out vec4 FragColor;
 in vec2 TexCoords;
+
 uniform int uPatternType;
+uniform float uScale;
 
 float stripes(vec2 uv) {
-    return step(0.5, fract(uv.x * 10.0));
+    return step(0.5, fract(uv.x * uScale));
 }
 
 float circles(vec2 uv) {
-    vec2 grid = fract(uv * 5.0);
+    vec2 grid = fract(uv * uScale);
     float d = length(grid - 0.5);
     return step(d, 0.25);
 }
 
 float triangles(vec2 uv) {
-    uv *= 10.0;
+    uv *= uScale;
     uv.y += floor(uv.x) * 0.5;
     vec2 tri = fract(uv);
     return step(tri.x, 1.0 - tri.y);
@@ -36,7 +38,7 @@ float triangles(vec2 uv) {
 
 float hexagons(vec2 uv) {
     float s = sqrt(3.0);
-    uv *= 5.0;
+    uv *= uScale;
     uv.x *= 2.0 / s;
     uv.y += mod(floor(uv.x), 2.0) * 0.5;
     vec2 a = fract(uv) - 0.5;
@@ -55,7 +57,7 @@ void main() {
 }
 )";
 
-PatternRenderer::PatternRenderer() : shader(vertexShaderSrc, fragmentShaderSrc) {
+PatternRenderer::PatternRenderer() : shader(vertexShaderSrc, fragmentShaderSrc), scale(5.0f) {
     initQuad();
 }
 
@@ -78,10 +80,15 @@ void PatternRenderer::initQuad() {
 void PatternRenderer::render() {
     shader.use();
     shader.setInt("uPatternType", patternType);
+    shader.setFloat("uScale", scale);
     glBindVertexArray(quadVAO);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
 void PatternRenderer::setPatternType(int type) {
     patternType = type;
+}
+
+void PatternRenderer::setScale(float s) {
+    scale = s;
 }

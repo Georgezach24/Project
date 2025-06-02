@@ -28,6 +28,10 @@ void Shader::setInt(const std::string& name, int value) {
     glUniform1i(getUniformLocation(name), value);
 }
 
+void Shader::setFloat(const std::string& name, float value) {
+    glUniform1f(getUniformLocation(name), value);
+}
+
 int Shader::getUniformLocation(const std::string& name) {
     return glGetUniformLocation(id, name.c_str());
 }

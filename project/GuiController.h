@@ -9,4 +9,6 @@ public:
 private:
     PatternRenderer& renderer;
     int selectedPattern = 0;
+    float currentScale = 5.0f;
+
 };
