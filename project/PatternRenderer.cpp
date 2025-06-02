@@ -6,9 +6,10 @@ static const char* vertexShaderSrc = R"(
 layout(location = 0) in vec2 aPos;
 out vec2 TexCoords;
 void main() {
-    TexCoords = aPos * 0.5 + 0.5;
+    TexCoords = aPos * 0.5 + 0.5; // convert from [-1, 1] to [0, 1]
     gl_Position = vec4(aPos, 0.0, 1.0);
-})";
+}
+)";
 
 static const char* fragmentShaderSrc = R"(
 #version 330 core
@@ -26,12 +27,33 @@ float circles(vec2 uv) {
     return step(d, 0.25);
 }
 
+float triangles(vec2 uv) {
+    uv *= 10.0;
+    uv.y += floor(uv.x) * 0.5;
+    vec2 tri = fract(uv);
+    return step(tri.x, 1.0 - tri.y);
+}
+
+float hexagons(vec2 uv) {
+    float s = sqrt(3.0);
+    uv *= 5.0;
+    uv.x *= 2.0 / s;
+    uv.y += mod(floor(uv.x), 2.0) * 0.5;
+    vec2 a = fract(uv) - 0.5;
+    vec2 b = abs(a);
+    float d = max(b.x * 1.5 + b.y, b.y * 2.0);
+    return step(d, 0.5);
+}
+
 void main() {
     float pattern = 0.0;
     if (uPatternType == 0) pattern = stripes(TexCoords);
     else if (uPatternType == 1) pattern = circles(TexCoords);
+    else if (uPatternType == 2) pattern = triangles(TexCoords);
+    else if (uPatternType == 3) pattern = hexagons(TexCoords);
     FragColor = vec4(vec3(pattern), 1.0);
-})";
+}
+)";
 
 PatternRenderer::PatternRenderer() : shader(vertexShaderSrc, fragmentShaderSrc) {
     initQuad();

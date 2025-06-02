@@ -5,7 +5,7 @@ GuiController::GuiController(PatternRenderer& renderer) : renderer(renderer) {}
 
 void GuiController::draw() {
     ImGui::Begin("Pattern Selector");
-    const char* patterns[] = {"Stripes", "Circles"};
+    const char* patterns[] = {"Stripes", "Circles", "Triangles", "Hexagons"};
     if (ImGui::Combo("Pattern", &selectedPattern, patterns, IM_ARRAYSIZE(patterns))) {
         renderer.setPatternType(selectedPattern);
     }
