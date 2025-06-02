@@ -1,2 +1,22 @@
 # Ignore large binary libs
 libs/win/*.lib
+
+# Ignore build artifacts and compiled binaries
+*.exe
+*.obj
+*.pdb
+*.ilk
+*.lib
+*.exp
+
+# VS debug output
+*.log
+
+# NMake temp
+*.pch
+
+# Backup files
+*~
+*.bak
+.DS_Store
+Thumbs.db
