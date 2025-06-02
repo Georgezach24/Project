@@ -18,6 +18,16 @@ in vec2 TexCoords;
 
 uniform int uPatternType;
 uniform float uScale;
+uniform float uRotation;
+
+vec2 rotate(vec2 uv, float angle) {
+    float s = sin(angle);
+    float c = cos(angle);
+    uv -= 0.5;
+    uv = mat2(c, -s, s, c) * uv;
+    uv += 0.5;
+    return uv;
+}
 
 float stripes(vec2 uv) {
     return step(0.5, fract(uv.x * uScale));
@@ -48,16 +58,17 @@ float hexagons(vec2 uv) {
 }
 
 void main() {
+    vec2 uv = rotate(TexCoords, uRotation);
     float pattern = 0.0;
-    if (uPatternType == 0) pattern = stripes(TexCoords);
-    else if (uPatternType == 1) pattern = circles(TexCoords);
-    else if (uPatternType == 2) pattern = triangles(TexCoords);
-    else if (uPatternType == 3) pattern = hexagons(TexCoords);
+    if (uPatternType == 0) pattern = stripes(uv);
+    else if (uPatternType == 1) pattern = circles(uv);
+    else if (uPatternType == 2) pattern = triangles(uv);
+    else if (uPatternType == 3) pattern = hexagons(uv);
     FragColor = vec4(vec3(pattern), 1.0);
 }
 )";
 
-PatternRenderer::PatternRenderer() : shader(vertexShaderSrc, fragmentShaderSrc), scale(5.0f) {
+PatternRenderer::PatternRenderer() : shader(vertexShaderSrc, fragmentShaderSrc), scale(5.0f), rotation(0.0f) {
     initQuad();
 }
 
@@ -81,6 +92,7 @@ void PatternRenderer::render() {
     shader.use();
     shader.setInt("uPatternType", patternType);
     shader.setFloat("uScale", scale);
+    shader.setFloat("uRotation", rotation);
     glBindVertexArray(quadVAO);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
@@ -91,4 +103,8 @@ void PatternRenderer::setPatternType(int type) {
 
 void PatternRenderer::setScale(float s) {
     scale = s;
+}
+
+void PatternRenderer::setRotation(float angle) {
+    rotation = angle;
 }
