@@ -19,6 +19,10 @@ in vec2 TexCoords;
 uniform int uPatternType;
 uniform float uScale;
 uniform float uRotation;
+uniform float uStripeWidth;
+uniform float uCircleRadius;
+uniform float uTriangleSize;
+uniform float uHexSize;
 
 vec2 rotate(vec2 uv, float angle) {
     float s = sin(angle);
@@ -30,20 +34,20 @@ vec2 rotate(vec2 uv, float angle) {
 }
 
 float stripes(vec2 uv) {
-    return step(0.5, fract(uv.x * uScale));
+    return step(uStripeWidth, fract(uv.x * uScale));
 }
 
 float circles(vec2 uv) {
     vec2 grid = fract(uv * uScale);
     float d = length(grid - 0.5);
-    return step(d, 0.25);
+    return step(d, uCircleRadius);
 }
 
 float triangles(vec2 uv) {
     uv *= uScale;
     uv.y += floor(uv.x) * 0.5;
     vec2 tri = fract(uv);
-    return step(tri.x, 1.0 - tri.y);
+    return step(tri.x, 1.0 - tri.y * uTriangleSize);
 }
 
 float hexagons(vec2 uv) {
@@ -51,19 +55,27 @@ float hexagons(vec2 uv) {
     uv *= uScale;
     uv.x *= 2.0 / s;
     uv.y += mod(floor(uv.x), 2.0) * 0.5;
+
     vec2 a = fract(uv) - 0.5;
     vec2 b = abs(a);
     float d = max(b.x * 1.5 + b.y, b.y * 2.0);
-    return step(d, 0.5);
+
+    return step(d, uHexSize * 0.25);
 }
 
 void main() {
     vec2 uv = rotate(TexCoords, uRotation);
     float pattern = 0.0;
-    if (uPatternType == 0) pattern = stripes(uv);
-    else if (uPatternType == 1) pattern = circles(uv);
-    else if (uPatternType == 2) pattern = triangles(uv);
-    else if (uPatternType == 3) pattern = hexagons(uv);
+
+    if (uPatternType == 0)
+        pattern = stripes(uv);
+    else if (uPatternType == 1)
+        pattern = circles(uv);
+    else if (uPatternType == 2)
+        pattern = triangles(uv);
+    else if (uPatternType == 3)
+        pattern = hexagons(uv);
+
     FragColor = vec4(vec3(pattern), 1.0);
 }
 )";
@@ -93,6 +105,10 @@ void PatternRenderer::render() {
     shader.setInt("uPatternType", patternType);
     shader.setFloat("uScale", scale);
     shader.setFloat("uRotation", rotation);
+    shader.setFloat("uStripeWidth", stripeWidth);
+    shader.setFloat("uCircleRadius", circleRadius);
+    shader.setFloat("uTriangleSize", triangleSize);
+    shader.setFloat("uHexSize", hexSize);
     glBindVertexArray(quadVAO);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
@@ -107,4 +123,20 @@ void PatternRenderer::setScale(float s) {
 
 void PatternRenderer::setRotation(float angle) {
     rotation = angle;
+}
+
+void PatternRenderer::setStripeWidth(float w) { 
+    stripeWidth = w; 
+}
+
+void PatternRenderer::setCircleRadius(float r) { 
+    circleRadius = r; 
+}
+
+void PatternRenderer::setTriangleSize(float s) { 
+    triangleSize = s; 
+}
+
+void PatternRenderer::setHexSize(float s) { 
+    hexSize = s; 
 }

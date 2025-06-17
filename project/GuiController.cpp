@@ -24,6 +24,24 @@ void GuiController::draw() {
         float radians = currentRotation * 3.14159265f / 180.0f;
         renderer.setRotation(radians);
     }
+    
+    if (selectedPattern == 0) {
+        if (ImGui::SliderFloat("Stripe Width", &stripeWidth, 0.01f, 1.0f)) {
+            renderer.setStripeWidth(stripeWidth);
+        }
+    } else if (selectedPattern == 1) {
+        if (ImGui::SliderFloat("Circle Radius", &circleRadius, 0.01f, 0.5f)) {
+            renderer.setCircleRadius(circleRadius);
+        }
+    } else if (selectedPattern == 2) {
+        if (ImGui::SliderFloat("Triangle Size", &triangleSize, 0.2f, 2.0f)) {
+            renderer.setTriangleSize(triangleSize);
+        }
+    } else if (selectedPattern == 3) {
+        if (ImGui::SliderFloat("Hexagon Size", &hexSize, 1.0f,3.0f)) {
+            renderer.setHexSize(hexSize);
+        }
+    }
 
     ImGui::End();
 }

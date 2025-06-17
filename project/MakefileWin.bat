@@ -1,4 +1,3 @@
 @echo off
 set PATH=C:\msys64\ucrt64\bin;%PATH%
-mingw32-make -f MakefileWin %1
-pause
+nmake -f MakefileWin %1
