@@ -1,16 +1,13 @@
 #pragma once
-
-#include <glad/glad.h>
-#include <glm/glm.hpp>
 #include <string>
 #include <vector>
-#include <assimp/scene.h>
-#include <assimp/Importer.hpp>
-#include <assimp/postprocess.h>
+#include <glad/glad.h>
+#include <glm/glm.hpp>
 
 struct Vertex {
     glm::vec3 Position;
     glm::vec3 Normal;
+    glm::vec2 TexCoords;
 };
 
 class Model {

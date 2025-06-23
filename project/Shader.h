@@ -1,17 +1,16 @@
 #pragma once
-#include <string>
+#include <glad/glad.h>
 #include <glm/glm.hpp>
+#include <string>
 
 class Shader {
 public:
-    Shader(const char* vertexSrc, const char* fragmentSrc);
-    void use();
-    void setInt(const std::string& name, int value);
-    void setFloat(const std::string& name, float value);
-    void setVec3(const std::string& name, float x, float y, float z);
-    void setMat4(const std::string& name, const glm::mat4& mat);
-
-private:
-    unsigned int id;
-    int getUniformLocation(const std::string& name);
+    unsigned int ID;
+    Shader(const char* vertexPath, const char* fragmentPath);
+    void use() const;
+    void setInt(const std::string &name, int value) const;
+    void setFloat(const std::string &name, float value) const;
+    void setVec3(const std::string &name, float x, float y, float z) const;
+    void setVec3(const std::string &name, glm::vec3 vec) const;
+    void setMat4(const std::string &name, const glm::mat4 &mat) const;
 };
