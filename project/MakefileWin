@@ -6,10 +6,10 @@ CC = cl.exe
 CCFLAGS = /Od /Zi /EHsc /MT
 
 # Include paths
-INCLUDES = /I../include /I../include/imgui /I../include/imgui/backends /I../include/glad /I../include/assimp
+INCLUDES = /I../include /I../include/imgui /I../include/imgui/backends /I../include/glad /I../include/assimp /I../include/pugixml /I../include/clipper
 
 # Linker libraries
-LFLAGS = /LIBPATH:../libs/win glfw3.lib assimp-vc143-mt.lib zlib.lib gdi32.lib user32.lib Shell32.lib Advapi32.lib
+LFLAGS = /LIBPATH:../libs/win glfw3.lib assimp-vc143-mt.lib pugixml.lib zlib.lib clipper.lib poly2tri.lib minizip.lib gdi32.lib user32.lib Shell32.lib Advapi32.lib
 
 # Source files
 SOURCES = \
@@ -36,4 +36,4 @@ all:
 
 .PHONY : clean
 clean:
-	del /Q *.obj *.pdb *.exe
+
