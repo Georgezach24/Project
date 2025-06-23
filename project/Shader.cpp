@@ -1,5 +1,6 @@
 #include "Shader.h"
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
 Shader::Shader(const char* vertexSrc, const char* fragmentSrc) {
@@ -20,22 +21,21 @@ Shader::Shader(const char* vertexSrc, const char* fragmentSrc) {
     glDeleteShader(fragment);
 }
 
-void Shader::use() {
-    glUseProgram(id);
-}
+void Shader::use() { glUseProgram(id); }
 
 void Shader::setInt(const std::string& name, int value) {
     glUniform1i(getUniformLocation(name), value);
 }
-
 void Shader::setFloat(const std::string& name, float value) {
     glUniform1f(getUniformLocation(name), value);
+}
+void Shader::setVec3(const std::string& name, float x, float y, float z) {
+    glUniform3f(getUniformLocation(name), x, y, z);
+}
+void Shader::setMat4(const std::string& name, const glm::mat4& mat) {
+    glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(mat));
 }
 
 int Shader::getUniformLocation(const std::string& name) {
     return glGetUniformLocation(id, name.c_str());
-}
-
-void Shader::setVec3(const std::string& name, float x, float y, float z) {
-    glUniform3f(getUniformLocation(name), x, y, z);
 }
