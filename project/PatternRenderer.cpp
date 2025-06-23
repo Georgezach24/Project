@@ -23,6 +23,7 @@ uniform float uStripeWidth;
 uniform float uCircleRadius;
 uniform float uTriangleSize;
 uniform float uHexSize;
+uniform vec3 uColor;
 
 vec2 rotate(vec2 uv, float angle) {
     float s = sin(angle);
@@ -76,7 +77,7 @@ void main() {
     else if (uPatternType == 3)
         pattern = hexagons(uv);
 
-    FragColor = vec4(vec3(pattern), 1.0);
+    FragColor = vec4(pattern * uColor, 1.0);
 }
 )";
 
@@ -109,6 +110,7 @@ void PatternRenderer::render() {
     shader.setFloat("uCircleRadius", circleRadius);
     shader.setFloat("uTriangleSize", triangleSize);
     shader.setFloat("uHexSize", hexSize);
+    shader.setVec3("uColor", color[0], color[1], color[2]);
     glBindVertexArray(quadVAO);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
@@ -139,4 +141,10 @@ void PatternRenderer::setTriangleSize(float s) {
 
 void PatternRenderer::setHexSize(float s) { 
     hexSize = s; 
+}
+
+void PatternRenderer::setColor(float r, float g, float b) {
+    color[0] = r;
+    color[1] = g;
+    color[2] = b;
 }

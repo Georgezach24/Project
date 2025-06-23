@@ -1,6 +1,6 @@
 #include "GuiController.h"
 #include <imgui.h>
-#include <cmath> // for M_PI if needed
+#include <cmath> 
 
 GuiController::GuiController(PatternRenderer& renderer) 
     : renderer(renderer), currentScale(5.0f), currentRotation(0.0f) {
@@ -41,6 +41,11 @@ void GuiController::draw() {
         if (ImGui::SliderFloat("Hexagon Size", &hexSize, 1.0f,3.0f)) {
             renderer.setHexSize(hexSize);
         }
+    }
+
+    // Color picker
+    if (ImGui::ColorEdit3("Pattern Color", color)) {
+        renderer.setColor(color[0], color[1], color[2]);
     }
 
     ImGui::End();

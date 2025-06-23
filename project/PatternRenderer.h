@@ -9,11 +9,12 @@ public:
     void setScale(float s);
     void setRotation(float angle);
 
-    // New pattern-specific setters
+    // Per-pattern attributes
     void setStripeWidth(float w);
     void setCircleRadius(float r);
     void setTriangleSize(float s);
     void setHexSize(float s);
+    void setColor(float r, float g, float b);
 
 private:
     Shader shader;
@@ -22,11 +23,12 @@ private:
     float scale = 5.0f;
     float rotation = 0.0f;
 
-    // Pattern-specific GUI state
+    // Pattern-specific parameters
     float stripeWidth = 0.5f;
     float circleRadius = 0.25f;
     float triangleSize = 1.0f;
-    float hexSize = 5.0f;
+    float hexSize = 1.0f;
 
+    float color[3] = {1.0f, 1.0f, 1.0f}; 
     void initQuad();
 };

@@ -17,4 +17,7 @@ private:
     float circleRadius = 0.25f;
     float triangleSize = 1.0f;
     float hexSize = 5.0f;
+
+    //color picker state
+    float color[3] = {1.0f, 1.0f, 1.0f};
 };
