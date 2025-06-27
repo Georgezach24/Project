@@ -9,9 +9,10 @@ in vec2 TexCoords;
 uniform vec3 lightPos;
 uniform vec3 viewPos;
 uniform sampler2D patternTexture;
+uniform bool useTexture;
 
 void main() {
-    vec3 texColor = texture(patternTexture, TexCoords).rgb;
+    vec3 texColor = useTexture ? texture(patternTexture, TexCoords).rgb : vec3(1.0);
 
     vec3 ambient = 0.1 * texColor;
 

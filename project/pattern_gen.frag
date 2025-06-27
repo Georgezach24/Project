@@ -34,11 +34,20 @@ void main() {
     } else if (uPatternType == 2) {
         vec2 p = fract(uv);
         float triangle = step(p.y, p.x) * step(p.y, 1.0 - p.x);
-        pattern = triangle * step(uTriangleSize, 0.5);
-    } else if (uPatternType == 3) {
-        vec2 p = mod(uv, uHexSize) - 0.5 * uHexSize;
-        float d = abs(p.x * 0.866025 + p.y * 0.5) + abs(p.y);
-        pattern = step(d, uHexSize * 0.5);
+        pattern = triangle;
+    }else if (uPatternType == 3) {
+        vec2 q = vec2(uv.x * 2.0 / (3.0 * uHexSize),
+                    (uv.y - mod(floor(uv.x / (1.5 * uHexSize)), 2.0) * 0.5 * sqrt(3.0) * uHexSize) / (sqrt(3.0) * uHexSize));
+
+        vec2 hex = fract(q) - 0.5;
+        vec2 id = floor(q);
+
+        // Stretching to hexagonal grid
+        float a = abs(hex.x);
+        float b = abs(hex.y);
+        bool isInside = b + a * 0.57735 < 0.5;
+
+        pattern = isInside ? 1.0 : 0.0;
     }
 
     FragColor = vec4(uColor * pattern, 1.0);

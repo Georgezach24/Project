@@ -113,23 +113,27 @@ int main() {
         shader.setVec3("lightPos", lightPos);
         shader.setVec3("viewPos", camera.Position);
 
-        // Bind generated pattern texture
+        // draw ground WITHOUT pattern
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, renderer.getTexture());
+        glBindTexture(GL_TEXTURE_2D, 0); // unbind pattern
         shader.setInt("patternTexture", 0);
 
-        // Draw ground
         glm::mat4 groundModel = glm::mat4(1.0f);
         groundModel = glm::translate(groundModel, glm::vec3(0.0f, -1.0f, 0.0f));
-        groundModel = glm::scale(groundModel, glm::vec3(10.0f));
+        groundModel = glm::scale(groundModel, glm::vec3(10.0f, 1.0f, 10.0f));
         shader.setMat4("model", groundModel);
+        shader.setBool("useTexture", false);
         ground.Draw();
 
-        // Draw bunny
-        glm::mat4 bunnyModel = glm::mat4(1.0f);
-        bunnyModel = glm::translate(bunnyModel, glm::vec3(0.0f, 0.0f, 0.0f));
-        bunnyModel = glm::scale(bunnyModel, glm::vec3(1.0f));
-        shader.setMat4("model", bunnyModel);
+        // bind pattern texture before bunny
+        glBindTexture(GL_TEXTURE_2D, renderer.getTexture());
+
+        // draw bunny
+        glm::mat4 bunnyModelMat = glm::mat4(1.0f);
+        bunnyModelMat = glm::translate(bunnyModelMat, glm::vec3(0.0f, 0.0f, 0.0f));
+        bunnyModelMat = glm::scale(bunnyModelMat, glm::vec3(1.0f));
+        shader.setMat4("model", bunnyModelMat);
+        shader.setBool("useTexture", true);
         bunny.Draw();
 
         // === ImGui Interface ===
