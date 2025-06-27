@@ -1,67 +1,27 @@
 #include "PatternRenderer.h"
-#include <glad/glad.h>
 #include <iostream>
 
-static const char* vertexShaderSrc = R"(
-#version 330 core
-layout(location = 0) in vec2 aPos;
-out vec2 TexCoords;
-void main() {
-    TexCoords = (aPos + 1.0) / 2.0;
-    gl_Position = vec4(aPos, 0.0, 1.0);
-}
-)";
-
-static const char* fragmentShaderSrc = R"(
-#version 330 core
-out vec4 FragColor;
-in vec2 TexCoords;
-
-uniform int uPatternType;
-uniform float uScale;
-uniform float uRotation;
-uniform vec3 uColor;
-
-mat2 rotate(float angle) {
-    float c = cos(angle);
-    float s = sin(angle);
-    return mat2(c, -s, s, c);
-}
-
-void main() {
-    vec2 uv = TexCoords * uScale - 0.5 * uScale;
-    uv = rotate(uRotation) * uv;
-
-    float val = 0.0;
-
-    if (uPatternType == 0) {
-        val = step(0.5, mod(uv.x, 1.0));
-    } else if (uPatternType == 1) {
-        val = step(length(fract(uv) - 0.5), 0.25);
-    } else if (uPatternType == 2) {
-        val = step(0.5, mod(uv.x + uv.y, 1.0));
-    } else if (uPatternType == 3) {
-        vec2 hex = vec2(1.0, sqrt(3.0));
-        vec2 grid = mod(uv, hex) - 0.5 * hex;
-        val = step(length(grid), 0.5);
-    }
-
-    FragColor = vec4(uColor * val, 1.0);
-}
-)";
-
-PatternRenderer::PatternRenderer() : shader(vertexShaderSrc, fragmentShaderSrc) {
+PatternRenderer::PatternRenderer()
+    : shader("pattern_gen.vert", "pattern_gen.frag") {
     initQuad();
     initFramebuffer();
 }
 
 void PatternRenderer::initQuad() {
-    float quad[] = {-1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f};
+    float quad[] = {
+        -1.0f, -1.0f,
+         1.0f, -1.0f,
+        -1.0f,  1.0f,
+         1.0f,  1.0f
+    };
+
     glGenVertexArrays(1, &quadVAO);
     glGenBuffers(1, &quadVBO);
+
     glBindVertexArray(quadVAO);
     glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(quad), quad, GL_STATIC_DRAW);
+
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 }
@@ -83,7 +43,7 @@ void PatternRenderer::initFramebuffer() {
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
 
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        std::cerr << "PatternRenderer framebuffer not complete!\n";
+        std::cerr << "[PatternRenderer] ERROR: Framebuffer is not complete!\n";
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -97,17 +57,31 @@ void PatternRenderer::render() {
     shader.setInt("uPatternType", patternType);
     shader.setFloat("uScale", scale);
     shader.setFloat("uRotation", rotation);
+    shader.setFloat("uStripeWidth", stripeWidth);
+    shader.setFloat("uCircleRadius", circleRadius);
+    shader.setFloat("uTriangleSize", triangleSize);
+    shader.setFloat("uHexSize", hexSize);
     shader.setVec3("uColor", color[0], color[1], color[2]);
 
     glBindVertexArray(quadVAO);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+unsigned int PatternRenderer::getTexture() const {
+    return texture;
 }
 
 void PatternRenderer::setPatternType(int type) { patternType = type; }
 void PatternRenderer::setScale(float s) { scale = s; }
 void PatternRenderer::setRotation(float angle) { rotation = angle; }
+void PatternRenderer::setStripeWidth(float w) { stripeWidth = w; }
+void PatternRenderer::setCircleRadius(float r) { circleRadius = r; }
+void PatternRenderer::setTriangleSize(float s) { triangleSize = s; }
+void PatternRenderer::setHexSize(float s) { hexSize = s; }
 void PatternRenderer::setColor(float r, float g, float b) {
-    color[0] = r; color[1] = g; color[2] = b;
+    color[0] = r;
+    color[1] = g;
+    color[2] = b;
 }
-GLuint PatternRenderer::getPatternTexture() const { return texture; }

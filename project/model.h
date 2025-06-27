@@ -1,8 +1,12 @@
 #pragma once
-#include <string>
-#include <vector>
+
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+#include <string>
+#include <vector>
+#include <assimp/scene.h>
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
 
 struct Vertex {
     glm::vec3 Position;

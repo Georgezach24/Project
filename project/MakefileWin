@@ -1,26 +1,24 @@
-# Makefile for RTGP lab project - Windows environment
-# Visual Studio compiler version
-
+# Makefile for RTGP lab project - Windows (MSVC)
 FILENAME = project
 CC = cl.exe
 CCFLAGS = /Od /Zi /EHsc /MT
 
-# Include paths
-INCLUDES = /I../include /I../include/imgui /I../include/imgui/backends /I../include/glad /I../include/assimp /I../include/pugixml /I../include/clipper
+# Includes
+INCLUDES = /I../include /I../include/imgui /I../include/imgui/backends /I../include/glad /I../include/assimp /I../include/pugixml /I../include/clipper /I.
 
-# Linker libraries
+# Libraries
 LFLAGS = /LIBPATH:../libs/win glfw3.lib assimp-vc143-mt.lib pugixml.lib zlib.lib clipper.lib poly2tri.lib minizip.lib gdi32.lib user32.lib Shell32.lib Advapi32.lib
 
-# Source files
+# Sources
 SOURCES = \
     ../include/glad/glad.c \
     main.cpp \
-    Application.cpp \
-    GuiController.cpp \
+    Camera.cpp \
+    Model.cpp \
     PatternRenderer.cpp \
     PatternFramebuffer.cpp \
+    GuiController.cpp \
     Shader.cpp \
-    Model.cpp \
     ../include/imgui/imgui.cpp \
     ../include/imgui/imgui_draw.cpp \
     ../include/imgui/imgui_tables.cpp \
@@ -30,10 +28,10 @@ SOURCES = \
 
 TARGET = $(FILENAME).exe
 
-.PHONY : all
+.PHONY: all
 all:
 	$(CC) $(CCFLAGS) $(INCLUDES) $(SOURCES) /Fe:$(TARGET) /link $(LFLAGS)
 
-.PHONY : clean
+.PHONY: clean
 clean:
-
+	
