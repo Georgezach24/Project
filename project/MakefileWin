@@ -16,7 +16,6 @@ SOURCES = \
     Camera.cpp \
     Model.cpp \
     PatternRenderer.cpp \
-    PatternFramebuffer.cpp \
     GuiController.cpp \
     Shader.cpp \
     ../include/imgui/imgui.cpp \
