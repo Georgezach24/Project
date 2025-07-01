@@ -5,6 +5,7 @@
 #include <sstream>
 #include <iostream>
 
+// Constructor for Shader class
 Shader::Shader(const char* vertexPath, const char* fragmentPath) {
     std::string vertexCode = readFile(vertexPath);
     std::string fragmentCode = readFile(fragmentPath);
@@ -32,10 +33,13 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
     glDeleteShader(fragment);
 }
 
+// Use the shader program
+// This function activates the shader program so that it can be used for rendering
 void Shader::use() const {
     glUseProgram(ID);
 }
 
+//===== Uniform Setters =====
 void Shader::setBool(const std::string& name, bool value) const {
     glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
 }
@@ -60,6 +64,7 @@ void Shader::setMat4(const std::string& name, const glm::mat4& mat) const {
     glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(mat));
 }
 
+// Reads the shader source code from a file
 std::string Shader::readFile(const char* path) {
     std::ifstream file(path);
     std::stringstream buffer;
@@ -67,6 +72,8 @@ std::string Shader::readFile(const char* path) {
     return buffer.str();
 }
 
+// Checks for shader compilation and program linking errors
+// It retrieves the status and logs any errors encountered during the process
 void Shader::checkCompileErrors(unsigned int shader, const std::string& type) {
     int success;
     char infoLog[1024];

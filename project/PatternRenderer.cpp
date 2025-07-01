@@ -1,12 +1,14 @@
 #include "PatternRenderer.h"
 #include <iostream>
 
+//Main constructor for PatternRenderer
 PatternRenderer::PatternRenderer()
     : shader("pattern_gen.vert", "pattern_gen.frag") {
     initQuad();
     initFramebuffer();
 }
 
+// Initializes the quad VAO and VBO for rendering the pattern
 void PatternRenderer::initQuad() {
     float quad[] = {
         -1.0f, -1.0f,
@@ -26,6 +28,8 @@ void PatternRenderer::initQuad() {
     glEnableVertexAttribArray(0);
 }
 
+// Initializes the framebuffer object (FBO) and texture for rendering the pattern
+// It creates a texture to store the pattern and a renderbuffer for depth and stencil
 void PatternRenderer::initFramebuffer() {
     glGenFramebuffers(1, &fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -48,6 +52,7 @@ void PatternRenderer::initFramebuffer() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+// Renders the pattern based on the current settings
 void PatternRenderer::render() {
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     glViewport(0, 0, 1024, 1024);
@@ -69,10 +74,12 @@ void PatternRenderer::render() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+// Returns the texture ID of the generated pattern
 unsigned int PatternRenderer::getTexture() const {
     return texture;
 }
 
+// Setters for pattern parameters
 void PatternRenderer::setPatternType(int type) { patternType = type; }
 void PatternRenderer::setScale(float s) { scale = s; }
 void PatternRenderer::setRotation(float angle) { rotation = angle; }

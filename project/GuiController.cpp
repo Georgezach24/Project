@@ -1,6 +1,7 @@
 #include "GuiController.h"
 #include <imgui.h>
 
+//Main constructor for GuiController
 GuiController::GuiController(PatternRenderer& renderer) : renderer(renderer) {
     renderer.setPatternType(selectedPattern);
     renderer.setScale(currentScale);
@@ -12,6 +13,7 @@ GuiController::GuiController(PatternRenderer& renderer) : renderer(renderer) {
     renderer.setColor(color[0], color[1], color[2]);
 }
 
+// Draws the GUI controls using ImGui
 void GuiController::draw() {
     ImGui::Begin("Pattern Controls");
 

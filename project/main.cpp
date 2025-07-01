@@ -20,11 +20,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void processInput(GLFWwindow* window);
 
-// ==== Settings ====
+// ==== Screen Variables ====
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
 
-// ==== Camera ====
+// ==== Camera Variables ====
 Camera camera(glm::vec3(0.0f, 1.0f, 5.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.f, 0.f);
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
@@ -37,7 +37,7 @@ float lastFrame = 0.0f; // Time of last frame
 
 int main() {
 
-    // Init GLFW
+    // === Initialize GLFW and GLAD ===
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -62,10 +62,10 @@ int main() {
 
     glEnable(GL_DEPTH_TEST);
 
-    // Shaders
+    // === Shader Setup ===
     Shader shader("textured_lighting.vert", "textured_lighting.frag");
 
-    // Models and renderer
+    // === Models and Renderer Setup ===
     PatternRenderer renderer;
     Model bunny("bunny_lp.obj");
     Model ground("plane.obj");
@@ -115,7 +115,7 @@ int main() {
 
         // draw ground WITHOUT pattern
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, 0); // unbind pattern
+        glBindTexture(GL_TEXTURE_2D, 0);
         shader.setInt("patternTexture", 0);
 
         glm::mat4 groundModel = glm::mat4(1.0f);
@@ -167,6 +167,8 @@ int main() {
     return 0;
 }
 
+// Processes input from the keyboard
+// This function checks for key presses and updates the camera position accordingly
 void processInput(GLFWwindow* window) {
     if (!showGUI) {
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
@@ -184,6 +186,8 @@ void processInput(GLFWwindow* window) {
     }
 }
 
+// Callback for mouse movement
+// This function is called whenever the mouse moves
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
     if (showGUI) return;
 
@@ -202,6 +206,8 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
     camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
+// Callback for key presses
+// This function toggles the GUI visibility when the Escape key is pressed
 void key_callback(GLFWwindow* window, int key, int, int action, int) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         showGUI = !showGUI;

@@ -1,10 +1,13 @@
 #include "Model.h"
 #include <iostream>
 
+//Main constructor for Model
 Model::Model(const std::string& path) {
     loadModel(path);
 }
 
+// Loads the model from the specified path using Assimp
+// It processes the mesh data and stores it in the vertices and indices vectors
 void Model::loadModel(const std::string& path) {
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs);
@@ -35,6 +38,8 @@ void Model::loadModel(const std::string& path) {
     setupMesh();
 }
 
+// Sets up the vertex array object (VAO), vertex buffer object (VBO), and element buffer object (EBO)
+// It configures the vertex attributes for position, normal, and texture coordinates
 void Model::setupMesh() {
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -60,6 +65,7 @@ void Model::setupMesh() {
     glBindVertexArray(0);
 }
 
+// Draws the model using the VAO and the stored indices
 void Model::Draw() const {
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
